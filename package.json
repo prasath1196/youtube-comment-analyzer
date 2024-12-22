@@ -1,0 +1,19 @@
+{
+  "name": "youtube_comment_analyzer",
+  "version": "1.0.0",
+  "description": "Application that integrates with LLM models to analyse youtube comments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/prasath1196/youtube-comment-analyzer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prasath1196/youtube-comment-analyzer/issues"
+  },
+  "homepage": "https://github.com/prasath1196/youtube-comment-analyzer#readme"
+}
