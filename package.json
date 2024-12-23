@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/prasath1196/youtube-comment-analyzer/issues"
   },
-  "homepage": "https://github.com/prasath1196/youtube-comment-analyzer#readme"
+  "homepage": "https://github.com/prasath1196/youtube-comment-analyzer#readme",
+  "dependencies": {
+    "dot-env": "^0.0.1",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0",
+    "mongodb": "^6.12.0",
+    "openai": "^4.77.0"
+  },
+  "type": "module"
 }
