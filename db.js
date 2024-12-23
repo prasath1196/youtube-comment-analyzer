@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { fetchCommentsFromYT } from "./ytService.js";
 dotenv.config();
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
@@ -27,4 +28,26 @@ const getDB = () => {
   return db;
 };
 
-module.exports = { connectDB, getDB };
+const storeCommentsInDB = async (comments) => {
+  await connectDB();
+  const db = getDB();
+  const collection = db.collection('comments'); // Replace with your collection name
+  await collection.insertMany(comments);
+  console.log('Comments stored in MongoDB');
+};
+
+const fetchCommentsFromDB = async (videoId) => {
+  await connectDB();
+  const db = getDB();
+  const collection = db.collection('comments');
+  const comments = await collection.find({ videoId: videoId }).toArray();
+  if (comments.length === 0) {
+    const comments = await fetchCommentsFromYT(videoId);
+    await storeCommentsInDB(comments);
+    return comments;
+  }
+  return comments;
+};
+
+
+export { storeCommentsInDB, fetchCommentsFromDB };
