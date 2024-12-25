@@ -1,11 +1,25 @@
 import { getSentiment } from './openAIService.js';
-import { fetchCommentsFromDB } from './db.js';
+import { fetchCommentsFromDB, updateCommentSentiment } from './db.js';
+
+import express from 'express';
+import path from 'path';
+
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'index.html'));
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
 const startApp = async () => {
-  const comments = await fetchCommentsFromDB('UWvebURU9Kk');
+  const comments = await fetchCommentsFromDB('RDoVLHaYfgM');
   for (let i = 0; i < 10; i++) {
     const sentiment = await getSentiment(comments[i].text);
-    console.log(sentiment);
-    console.log(sentiment.sentiment);
+    updateCommentSentiment(comments[i].commentId, sentiment);
   }
 };
 

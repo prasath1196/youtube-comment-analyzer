@@ -49,5 +49,12 @@ const fetchCommentsFromDB = async (videoId) => {
   return comments;
 };
 
+const updateCommentSentiment = async (commentId, sentiment) => {
+  await connectDB();
+  const db = getDB();
+  const collection = db.collection('comments');
+  await collection.updateOne({ commentId: commentId }, { $set: { sentiment: sentiment } });
+};
 
-export { storeCommentsInDB, fetchCommentsFromDB };
+
+export { storeCommentsInDB, fetchCommentsFromDB, updateCommentSentiment };
