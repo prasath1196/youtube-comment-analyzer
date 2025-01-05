@@ -15,6 +15,14 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
+app.get('/api/analyze', async (req, res) => {
+  const comments = await fetchCommentsFromDB('RDoVLHaYfgM');
+  for (let i = 0; i < 10; i++) {
+    const sentiment = await getSentiment(comments[i].text);
+    updateCommentSentiment(comments[i].commentId, sentiment);
+  }
+  res.send('Comments analyzed');)
+
 const startApp = async () => {
   const comments = await fetchCommentsFromDB('RDoVLHaYfgM');
   for (let i = 0; i < 10; i++) {
