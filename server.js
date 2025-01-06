@@ -1,5 +1,5 @@
 import { getSentiment } from './openAIService.js';
-import { fetchCommentsFromDB, updateCommentSentiment } from './db.js';
+import { fetchCommentsFromDB, updateCommentSentiment, getSentimentFromDB } from './db.js';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -71,8 +71,17 @@ app.post('/api/analyze', async (req, res) => {
         // Analyze sentiments for comments
         for (const comment of commentsToAnalyze) {
             try {
-                const sentiment = await getSentiment(comment.text);
-                await updateCommentSentiment(comment.commentId, sentiment);
+                // First check if we already have the sentiment
+                let sentiment = await getSentimentFromDB(comment.commentId);
+                
+                if (!sentiment) {
+                    // Only call OpenAI if we don't have the sentiment
+                    console.log(`No cached sentiment for ${comment.commentId}, calling OpenAI...`);
+                    sentiment = await getSentiment(comment.text);
+                    await updateCommentSentiment(comment.commentId, sentiment);
+                } else {
+                    console.log(`Using cached sentiment for ${comment.commentId}: ${sentiment}`);
+                }
                 
                 // Only count valid sentiments
                 if (['positive', 'negative', 'neutral', 'curious'].includes(sentiment)) {

@@ -76,13 +76,26 @@ const fetchCommentsFromDB = async (videoId) => {
   }
 };
 
+const getSentimentFromDB = async (commentId) => {
+  try {
+    const db = await getDB();
+    const comment = await db.collection('comments').findOne(
+      { commentId },
+      { projection: { sentiment: 1 } }
+    );
+    return comment?.sentiment || null;
+  } catch (error) {
+    console.error('Error fetching sentiment:', error);
+    throw error;
+  }
+};
+
 const updateCommentSentiment = async (commentId, sentiment) => {
   try {
     const db = await getDB();
-    const collection = db.collection('comments');
-    await collection.updateOne(
+    await db.collection('comments').updateOne(
       { commentId: commentId },
-      { $set: { sentiment: sentiment } }
+      { $set: { sentiment: sentiment, analyzedAt: new Date() } }
     );
     console.log(`Updated sentiment for comment ${commentId}`);
   } catch (error) {
@@ -91,4 +104,4 @@ const updateCommentSentiment = async (commentId, sentiment) => {
   }
 };
 
-export { storeCommentsInDB, fetchCommentsFromDB, updateCommentSentiment };
+export { storeCommentsInDB, fetchCommentsFromDB, updateCommentSentiment, getSentimentFromDB };
