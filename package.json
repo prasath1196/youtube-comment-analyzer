@@ -1,10 +1,26 @@
 {
-  "name": "youtube_comment_analyzer",
+  "name": "youtube-comment-analyzer",
   "version": "1.0.0",
-  "description": "Application that integrates with LLM models to analyse youtube comments",
-  "main": "index.js",
+  "type": "module",
+  "description": "YouTube Comment Sentiment Analyzer",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "build": "cd client && npm install && npm run build",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "googleapis": "^118.0.0",
+    "mongodb": "^5.3.0",
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",
@@ -15,20 +31,5 @@
   "bugs": {
     "url": "https://github.com/prasath1196/youtube-comment-analyzer/issues"
   },
-  "homepage": "https://github.com/prasath1196/youtube-comment-analyzer#readme",
-  "dependencies": {
-    "dot-env": "^0.0.1",
-    "dotenv": "^16.4.7",
-    "ejs": "^3.1.10",
-    "express": "^4.21.2",
-    "googleapis": "^144.0.0",
-    "mongodb": "^6.12.0",
-    "openai": "^4.77.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "type": "module",
-  "devDependencies": {
-    "parcel": "^2.13.3"
-  }
+  "homepage": "https://github.com/prasath1196/youtube-comment-analyzer#readme"
 }

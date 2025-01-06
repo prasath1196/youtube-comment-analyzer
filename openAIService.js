@@ -2,17 +2,15 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 dotenv.config();
 
-
 const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
-
 
 const getSentiment = async (content) => {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4-0125-preview",
       messages: [
         {
           role: "user",
-          content: `Analyze the sentiment of the following comments. Use one of these categories: positive, negative, neutral, or curious.
+          content: `Analyze the sentiment of the following comment. Use one of these categories: positive, negative, neutral, or curious.
           
           Examples:
           Comment: "Awesome video! I love it!"
@@ -39,9 +37,10 @@ const getSentiment = async (content) => {
     });
   
     console.log("Called OpenAI API");
-    console.log(completion.choices[0].message.content, content);
-    return completion.choices[0].message.content;
+    // Extract just the sentiment word from the response
+    const sentiment = completion.choices[0].message.content.toLowerCase().trim();
+    console.log(`Sentiment for comment "${content}": ${sentiment}`);
+    return sentiment;
   };
   
   export { getSentiment };
-  

@@ -2,10 +2,11 @@
   "name": "namaste_react",
   "version": "1.0.0",
   "description": "This is namaste react",
+  "source": "index.html",
   "scripts": {
     "test": "jest",
     "start": "parcel index.html",
-    "build": "parcel build"
+    "build": "parcel build index.html --dist-dir dist"
   },
   "repository": {
     "type": "git",
@@ -33,16 +34,19 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "parcel": "^2.8.3",
-    "postcss": "^8.4.49",
+    "postcss": "^8.4.31",
     "process": "^0.11.10",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.3.5"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
+    "@swc/helpers": "^0.5.15",
+    "chart.js": "^4.4.1",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^6.24.1"
+    "react-router-dom": "^6.18.0"
   },
   "browserslist": [
     "last 2 versions"

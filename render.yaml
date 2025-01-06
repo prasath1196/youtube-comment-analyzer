@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: youtube-comment-analyzer
+    env: node
+    buildCommand: cd client && npm install && npm run build && cd .. && npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18.0.0
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: YOUTUBE_API_KEY
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        sync: false

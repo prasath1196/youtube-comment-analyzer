@@ -4,6 +4,9 @@ dotenv.config();
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const uri = process.env.MONGO_URI;
+if (!uri) {
+  throw new Error('MongoDB URI is not defined in environment variables');
+}
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -16,45 +19,76 @@ const client = new MongoClient(uri, {
 let db;
 
 const connectDB = async () => {
-  await client.connect();
-  db = client.db(process.env.MONGO_DB);
-  console.log('Connected to MongoDB');
+  try {
+    if (!db) {
+      await client.connect();
+      db = client.db(process.env.MONGO_DB);
+      console.log('Connected to MongoDB');
+    }
+    return db;
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    throw error;
+  }
 };
 
-const getDB = () => {
+const getDB = async () => {
   if (!db) {
-    throw new Error('Database not initialized. Call connectDB first.');
+    await connectDB();
   }
   return db;
 };
 
 const storeCommentsInDB = async (comments) => {
-  await connectDB();
-  const db = getDB();
-  const collection = db.collection('comments'); // Replace with your collection name
-  await collection.insertMany(comments);
-  console.log('Comments stored in MongoDB');
+  try {
+    const db = await getDB();
+    const collection = db.collection('comments');
+    await collection.insertMany(comments);
+    console.log('Comments stored in MongoDB');
+  } catch (error) {
+    console.error('Error storing comments:', error);
+    throw error;
+  }
 };
 
 const fetchCommentsFromDB = async (videoId) => {
-  await connectDB();
-  const db = getDB();
-  const collection = db.collection('comments');
-  const comments = await collection.find({ videoId: videoId }).toArray();
-  if (comments.length === 0) {
-    const comments = await fetchCommentsFromYT(videoId);
-    await storeCommentsInDB(comments);
+  try {
+    const db = await getDB();
+    const collection = db.collection('comments');
+    let comments = await collection.find({ videoId: videoId }).toArray();
+    
+    if (comments.length === 0) {
+      console.log('No comments found in DB, fetching from YouTube...');
+      comments = await fetchCommentsFromYT(videoId);
+      if (comments && comments.length > 0) {
+        await storeCommentsInDB(comments);
+      }
+    }
+    
+    if (!comments || comments.length === 0) {
+      throw new Error('No comments found for this video');
+    }
+    
     return comments;
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    throw error;
   }
-  return comments;
 };
 
 const updateCommentSentiment = async (commentId, sentiment) => {
-  await connectDB();
-  const db = getDB();
-  const collection = db.collection('comments');
-  await collection.updateOne({ commentId: commentId }, { $set: { sentiment: sentiment } });
+  try {
+    const db = await getDB();
+    const collection = db.collection('comments');
+    await collection.updateOne(
+      { commentId: commentId },
+      { $set: { sentiment: sentiment } }
+    );
+    console.log(`Updated sentiment for comment ${commentId}`);
+  } catch (error) {
+    console.error('Error updating comment sentiment:', error);
+    throw error;
+  }
 };
-
 
 export { storeCommentsInDB, fetchCommentsFromDB, updateCommentSentiment };
