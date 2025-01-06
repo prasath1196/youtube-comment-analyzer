@@ -2,6 +2,9 @@
 
 A powerful web application that analyzes YouTube video comments using AI to determine sentiment and provide insights. The application uses OpenAI's GPT model to analyze comments and categorize them into different sentiment categories.
 
+## Live Demo
+Try the application here: [https://youtube-comment-analyzer-r8yw.onrender.com/](https://youtube-comment-analyzer-r8yw.onrender.com/)
+
 ## Features
 
 - 🎥 Fetch comments from YouTube videos
